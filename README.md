@@ -1,3 +1,4 @@
+# DMDD_Ass3
 # NBA Players stat
 
 
@@ -184,109 +185,133 @@ Run the below Queries for the complete code Execution by following the given ste
 ## Use Cases
           
 
-### 1. What are the effective field goal percentages of each team?	
-
-SQL Statement: 
-
-	SELECT SUM(PS.Effective_Field_Goal_Percentage), T.Team_Name, P.Player_Name
-	FROM Player P
-	JOIN Player_Stats PS ON Player = Player_Name
-	JOIN Team T ON Team_Name = Team
-	GROUP BY Effective_Field_Goal_Percentage, Team_Name
-
-
-### 2. What are the average minutes played by a particular player ?
+### 1. Which players are playing for the team with the highest srs?
 
 SQL Statement:
-
-        SELECT PS.Minutes_Played, P.Player_Name
-	FROM Player_Stats PS
-	JOIN Player P ON Player = Player_Name
-
-### 3. Which player has the highest defensive block for each team?
-
-SQL Statement:
-      
-       SELECT P.Player_Name, MAX(PS.Blocks), T.Team_Name
-       FROM Player P
-       JOIN Player_Stats PS ON Player = Player_Name
-       JOIN Team T ON Team_Name = Team
-       GROUP BY Team_Name
+	SELECT Player_Name, MAX(SRS)
+	FROM Player p
+	JOIN Team  ON Team_Name = TEAM
+	GROUP BY Team_Name;
+	
+![image](https://github.com/SwapnilBhasgauri21/Web_Scraping/blob/master/Images/UC_1.png)
 
 
-### 4. Who are the players that should be chosen for increasing the chances of a team to win?
+
+### 2. Which player has the highest field goal percentage for a season and represents which team?
 
 SQL Statement:
+	SELECT PLayer, MAX(Effective_Field_Goal_Percentage), Team_Name
+	FROM Player_Stats 
+	JOIN Player ON Player = Player_Name
+	JOIN Team  ON Team_Name = Team
+	
+![image](https://github.com/SwapnilBhasgauri21/Web_Scraping/blob/master/Images/UC_2.png)
 
-	SELECT PS.Points, P.Player_Name
- 	FROM Player_Stats PS
-	JOIN Player P ON PS.Player = P.Player_Name
-
-
-### 5.  What is the percentage of offensive rebounds per game of a particular player ?
-
-SQL Statement:
-
-	SELECT  distinct P.Player_Name, (PS.Offensive_Rebounds/Total_Rebounds) AS OFFENSIVE_PERCENTAGE
-	FROM Player_Stats PS
-	JOIN Player P ON Player = Player_Name
-	WHERE P.Player_Name = 'Kadeem Allen'
+	
 
 
-### 6.	Which player had the highest points from each team that had the highest win?
+### 3. Which players have the 3 pointer percentage greater than 0.4 and which team they belong to?
 
 SQL Statement:
-
-	SELECT MAX(Points), P.Player_Name,  T.Team_Name
-	FROM Player P
-	JOIN Player_Stats PS ON Player = Player_Name
-	JOIN Team T ON Team_Name = Team
-	WHERE (SELECT MAX(Win) FROM Team)
-	GROUP BY Team_Name
-
-
-### 7. Which players have the lowest free throw percentage for each team?
-
-SQL Statement:
-
-	SELECT MIN(Free_Throws_Percentage), P.Player_Name,  T.Team_Name
-	FROM Player P
-	JOIN Player_Stats PS ON Player = Player_Name
-	JOIN Team T ON Team_Name = Team
-	GROUP BY Team_Name
+	SELECT PLayer, 3_Points_Percentage, Team_Name
+	FROM Player_Stats 
+	JOIN Player ON Player = Player_Name
+	JOIN Team  ON Team_Name = Team
+	WHERE 3_Points_Percentage > 0.4;
+	
+![image](https://github.com/SwapnilBhasgauri21/Web_Scraping/blob/master/Images/UC_3.png)
 
 
 
-### 8. Which player has the most number of steals in a particular team?
+### 4. Which team has players of age group 25 to 30 and what are their particular points?
 
 SQL Statement:
+	SELECT PLayer, Age, Team_Name
+	FROM Player_Stats 
+	JOIN Player ON Player = Player_Name
+	JOIN Team  ON Team_Name = Team
+	WHERE Age between 25 AND 30;
+	
+![image](https://github.com/SwapnilBhasgauri21/Web_Scraping/blob/master/Images/UC_4.png)
 
-	SELECT MAX(Steals), T.Team_Name
-	FROM Player_Stats PS
-	JOIN Player P ON Player = Player_Name
-	JOIN Team T ON Team_Name = Team
-	GROUP BY Team_Name
 
 
-
-### 9.  Which player has the highest number of assists in a particular team?
+### 5.  Which all players are playing at centre position for the team?
 
 SQL Statement:
+	SELECT PLayer, position, Team_Name
+	FROM Player_Stats 
+	JOIN Player ON Player = Player_Name
+	JOIN Team  ON Team_Name = Team
+	WHERE position = 'C' 
+	
+![image](https://github.com/SwapnilBhasgauri21/Web_Scraping/blob/master/Images/UC_5.png)
 
-	SELECT MAX(Assists), T.Team_Name
-	FROM Player_Stats PS
-	JOIN Player P ON Player = Player_Name
-	JOIN Team T ON Team_Name = Team
-	GROUP BY Team_Name
 
-### 10.  What is the percentage of defensive rebounds per game of a particular player ?
-  
+
+### 6.	Which player has the highest minutes played and for which team?
+
 SQL Statement:
-                      
-	SELECT  distinct P.Player_Name, (PS.Defensive_Rebounds/Total_Rebounds) AS OFFENSIVE_PERCENTAGE
-	FROM Player_Stats PS
-	JOIN Player P ON Player = Player_Name
-	WHERE P.Player_Name = 'Kadeem Allen'
+	SELECT PLayer, Team_Name, MAX(Minutes_Played)
+	FROM Player_Stats 
+	JOIN Player ON Player = Player_Name
+	JOIN Team  ON Team_Name = Team
+	
+![image](https://github.com/SwapnilBhasgauri21/Web_Scraping/blob/master/Images/UC_6.png)
+
+
+
+### 7. Which all players are playing at power forward position for the team with highest srs?
+
+SQL Statement:
+	SELECT DISTINCT(PLayer), Team_Name, MAX(SRS) 
+	FROM Player_Stats 
+	JOIN Player ON Player = Player_Name
+	JOIN Team  ON Team_Name = Team
+	WHERE position = 'PF' ; 
+	
+![image](https://github.com/SwapnilBhasgauri21/Web_Scraping/blob/master/Images/UC_7.png)
+
+
+
+
+### 8. Which is the youngest player who has played the most games?
+
+SQL Statement:
+	SELECT DISTINCT(PLayer), MIN(Age), MAX(Game)
+	FROM Player_Stats 
+	JOIN Player ON Player = Player_Name
+	JOIN Team  ON Team_Name = Team;
+	
+![image](https://github.com/SwapnilBhasgauri21/Web_Scraping/blob/master/Images/UC_8.png)
+
+
+
+
+### 9.  Which all teams have srs greater than 3 and who all are playing under them?
+ 
+SQL Statement:
+	SELECT DISTINCT(PLayer),SRS
+	FROM Player_Stats 
+	JOIN Player ON Player = Player_Name
+	JOIN Team  ON Team_Name = Team
+	WHERE SRS > 3;
+
+![image](https://github.com/SwapnilBhasgauri21/Web_Scraping/blob/master/Images/UC_9.png)
+
+
+
+### 10.  Which players have the highest points from each team?
+
+SQL Statement:
+	SELECT DISTINCT(PLayer),MAX(Points), Team
+	FROM Player_Stats 
+	JOIN Player ON Player = Player_Name
+	JOIN Team  ON Team_Name = Team
+	GROUP BY Team
+	
+	
+![image](https://github.com/SwapnilBhasgauri21/Web_Scraping/blob/master/Images/UC_10.png)
 
 
 
@@ -294,20 +319,20 @@ SQL Statement:
 ## Sample data from all tables
 
 ### Player table:
-![image](https://github.com/SwapnilBhasgauri21/Web_Scraping/blob/master/Images/Player%20table.png)
+![image](https://github.com/vikpawar22/DMDD_Ass3/blob/master/Images/Player%20table.png)
 
 
 ### Coach Table:
-![image](https://github.com/SwapnilBhasgauri21/Web_Scraping/blob/master/Images/Coach%20Table.png)
+![image](https://github.com/vikpawar22/DMDD_Ass3/blob/master/Images/Coach%20Table.png)
 
 
 ### Player_stats Table:
-![image](https://github.com/SwapnilBhasgauri21/Web_Scraping/blob/master/Images/Player%20Stats%20table.png)
+![image](https://github.com/vikpawar22/DMDD_Ass3/blob/master/Images/Player%20Stats%20table.png)
 
 
 ### Stadium Table:
-![image](https://github.com/SwapnilBhasgauri21/Web_Scraping/blob/master/Images/Stadium%20Table.png)
+![image](https://github.com/vikpawar22/DMDD_Ass3/blob/master/Images/Stadium%20Table.png)
 
 
 ### Team Table: 
-![image](https://github.com/SwapnilBhasgauri21/Web_Scraping/blob/master/Images/Team%20Table.png)
+![image](https://github.com/vikpawar22/DMDD_Ass3/blob/master/Images/Team%20Table.png)
